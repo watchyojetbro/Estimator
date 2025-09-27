@@ -1,10 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- Ensure CSS is linked correctly -->
+    <link rel="stylesheet" href="/CSS/style.css" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grade Estimator - AUD</title>
+  </head>
+  <body>
+    
+    <!-- Navigation (Consistent with index.html) -->
+    <nav>
+        <div class="navbar-container">
+            <span class="site-title">TUDA First Year</span>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/estimator" class="active-link">Estimator</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="content-wrapper">
+        <div class="calculator-container">
+            <h2>AUD Grade Performance Analyzer</h2>
+            <p class="description">
+                Calculate the percentage of students across all recorded semesters 
+                (SoSe23, SoSe24, WiSe2425) who achieved a specific German grade or better.
+            </p>
+
+            <div class="input-group">
+                <label for="grade-select">Select Target Grade (Grade X or better):</label>
+                <select id="grade-select" name="grade">
+                    <!-- Grades are passed from the Flask route -->
+                    {% for grade in grades %}
+                        <option value="{{ grade }}">{{ grade }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button onclick="fetchPercentage()">Calculate Percentage</button>
+            </div>
+
+            <div id="result-display" class="result-box">
+                <p>Select a grade and click "Calculate Percentage" to see the combined performance.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function fetchPercentage() {
+            const grade = document.getElementById('grade-select').value;
+            const resultDisplay = document.getElementById('result-display');
+            
+            // Set loading state
+            resultDisplay.innerHTML = '<p class="loading-state">Calculating...</p>';
+            resultDisplay.classList.remove('error-state');
+
+            fetch(`/api/grade_percentage?grade=${grade}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => { throw new Error(data.error || 'Server error'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Display the successful result
+                    resultDisplay.innerHTML = `
+                        <p class="result-title">Achieved Grade **${data.grade}** or Better:</p>
+                        <p class="percentage">${data.percentage}%</p>
+                        <p class="details">
+                            (${data.students_target_or_better} students out of ${data.grand_total_students} total)
+                        </p>
+                    `;
+                    resultDisplay.classList.remove('error-state');
+                })
+                .catch(error => {
+                    // Display error
+                    console.error('Error fetching data:', error);
+                    resultDisplay.innerHTML = `<p class="error-message">Error: ${error.message || 'Could not fetch data.'}</p>`;
+                    resultDisplay.classList.add('error-state');
+                });
+        }
+    </script>
+  </body>
 </html>
