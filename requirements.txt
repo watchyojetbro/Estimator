@@ -1,0 +1,7 @@
+# Web Framework
+Flask>=2.2.0
+
+# Image Processing and OCR (OpenCV for image manipulation, pytesseract for text extraction)
+opencv-python>=4.6.0
+pytesseract>=0.3.10
+# Note: The system-level Tesseract OCR engine must be installed separately.

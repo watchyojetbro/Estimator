@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Estimator</title>
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-green: #059669;
+            --hover-green: #10b981;
+            --bg-color: #C60F0FA5;
+        }
+
+        /* Navbar Styles */
+        .navbar { background-color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .proj-name { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #333; }
+        /* End Navbar Styles */
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        /* 2. Central Container (The Card) */
+        #mainContainer {
+            background-color: white;
+            padding: 3rem;
+            width: 100%;
+            max-width: 28rem;
+            border-radius: 3rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* 3. Header Text */
+        h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        #mainContainer p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            max-width: 18rem;
+        }
+
+        /* 4. Percentage Circle */
+        .percentage-box {
+            margin-bottom: 2rem;
+            width: 10rem;
+            height: 10rem;
+            background-color: #eff6ff;
+            border: 4px solid #60a5fa;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .percentage-value-container {
+            text-align: center;
+        }
+
+        #percentageValue {
+            /* Initial value is 0 from HTML, this style applies to the calculated value */
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+        }
+
+        .percentage-value-container span:last-child {
+            font-size: 2.25rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+        }
+
+        .percentage-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* 5. Input and Button Styling */
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        #scoreInput {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            color: #4b5563;
+            appearance: none;
+            background-color: white;
+            transition: all 0.15s ease-in-out;
+        }
+
+        #scoreInput:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            outline: none;
+        }
+
+        /* 6. Confirm Button */
+        .confirm-button {
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            width: 100%;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            background-color: var(--primary-green);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .confirm-button:hover {
+            background-color: var(--hover-green);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.5), 0 4px 6px -2px rgba(16, 185, 129, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .confirm-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.5);
+        }
+
+        /* 7. Feedback Message */
+        #feedbackMessage {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* Loading indicator styling */
+        .loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .bg-green-100 { background-color: #d1fae5; }
+        .text-green-700 { color: #047857; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .text-red-700 { color: #b91c1c; }
+        .hidden { display: none; }
+        .block { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar (White Background) -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="proj-name">1ST YEAR</div>
+            <ul class="nav-links">
+                <li class="nav-link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-link"><a href="{{ url_for('estimator') }}" aria-current="page">Estimator</a></li>
+
+            </ul>
+            <div style="width: 80px;"></div>
+        </div>
+    </nav>
+
+
+    <!-- Central Container (Circular style with shadow) -->
+    <div id="mainContainer">
+
+        <!-- Header Text -->
+        <h1 class="header-title">
+            Goal Grade
+        </h1>
+        <p class="header-subtitle">
+            Please enter the grade you aim to get in AUD(Algorithmen and Datastrukturen) exam.
+        </p>
+
+        <!-- Growing Percentage Animation Box -->
+        <div class="percentage-box">
+            <div class="percentage-value-container">
+                <!-- Initial value is hardcoded 0 -->
+                <span id="percentageValue">0</span>
+                <span>%</span>
+                <p class="percentage-text">
+                    OF STUDENTS<br>HAVE THIS GRADE<br>OR A BETTER ONE
+                </p>
+            </div>
+        </div>
+
+        <h2 class="input-header">
+            Please choose from the list below
+        </h2>
+
+        <!-- Input Dropdown (For validated values) -->
+        <select id="scoreInput">
+            <option value="1.0" selected>1.0</option>
+            <option value="1.3">1.3</option>
+            <option value="1.7">1.7</option>
+            <option value="2.0">2.0</option>
+            <option value="2.3">2.3</option>
+            <option value="2.7">2.7</option>
+            <option value="3.0">3.0</option>
+            <option value="3.3">3.3</option>
+            <option value="3.7">3.7</option>
+            <option value="4.0">4.0</option>
+        </select>
+
+        <!-- Confirm Button -->
+        <button id="confirmButton" class="confirm-button">
+            Confirm and Calculate Percentage
+        </button>
+
+        <!-- Message Box for Feedback (Instead of alert()) -->
+        <div id="feedbackMessage" class="hidden">
+            <!-- Feedback will be displayed here -->
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const percentageElement = document.getElementById('percentageValue');
+            const confirmButton = document.getElementById('confirmButton');
+            const scoreInput = document.getElementById('scoreInput');
+            const feedbackMessage = document.getElementById('feedbackMessage');
+
+            console.log("DOM Content Loaded. Setting up listeners.");
+
+            /**
+             * Animates the percentage counter from its current value to the final value.
+             */
+            function animateValue(finalValue, element, duration = 1500) {
+                let startTimestamp = null;
+                // Get the current value from the element, default to 0
+                const startValue = parseInt(element.textContent) || 0;
+
+                if (startValue === finalValue) return;
+
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = timestamp - startTimestamp;
+
+                    const currentValue = Math.min(
+                        finalValue,
+                        startValue + (finalValue - startValue) * (progress / duration)
+                    );
+
+                    element.textContent = Math.floor(currentValue);
+
+                    if (progress < duration) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        element.textContent = finalValue;
+                    }
+                };
+
+                window.requestAnimationFrame(step);
+            }
+
+            // --- Handle Confirm Button Click (Fetches and Animates Percentage) ---
+            confirmButton.addEventListener('click', async () => {
+                const selectedScore = scoreInput.value;
+                const dataToSend = { score: selectedScore };
+
+                console.log(`[CLICK] Confirm button clicked. Sending score: ${selectedScore}`);
+
+                // 1. Clear previous feedback and show loading state
+                feedbackMessage.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700', 'hidden');
+                feedbackMessage.classList.add('block');
+                feedbackMessage.innerHTML = '<span class="loading"></span>Calculating percentage...';
+
+                try {
+                    // 2. Fetch the calculated percentage from the Flask API
+                    console.log("[FETCH] Sending POST request to /api/calculate_percentage");
+
+                    // NOTE: Fetching from the correct endpoint: /api/calculate_percentage
+                    const response = await fetch('/api/calculate_percentage', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dataToSend)
+                    });
+
+                    console.log(`[FETCH] Response received. Status: ${response.status}`);
+
+                    // Check if the response is OK (200-299)
+                    if (!response.ok) {
+                         // Attempt to read error message from server
+                        let errorDetails = `Server returned status ${response.status}.`;
+                        try {
+                            const errorResult = await response.json();
+                            errorDetails += ` Message: ${errorResult.message || 'No specific error message.'}`;
+                        } catch (jsonError) {
+                            errorDetails += " Response was not valid JSON.";
+                        }
+                        console.error(`[ERROR] Server response failure: ${errorDetails}`);
+                        feedbackMessage.innerHTML = `Error: ${errorDetails}`;
+                        feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+                        return;
+                    }
+
+                    const result = await response.json();
+
+                    console.log("[SUCCESS] Server response JSON:", result);
+
+                    // 3. Update feedback and run animation
+                    if (result.status === 'success' && typeof result.percentage === 'number') {
+                        const newPercentage = result.percentage;
+
+                        // Animate the percentage circle
+                        animateValue(newPercentage, percentageElement);
+
+                        feedbackMessage.innerHTML = ` Keep that 5.0 out of your mind.🔥`;
+                        feedbackMessage.classList.remove('bg-red-100', 'text-red-700');
+                        feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+
+                    }
+
+
+                } catch (error) {
+                    // This catches network errors (e.g., server unreachable) or JSON parsing errors
+                    console.error('[CRITICAL NETWORK ERROR] Calculation failed:', error);
+                    feedbackMessage.innerHTML = 'Critical Error: The server could not be reached or the response was unreadable. Check your console for details.';
+                    feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
