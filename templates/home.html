@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sleek Landing Page</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+body { font-family: 'Roboto', sans-serif; margin: 0; }
+.navbar { background-color: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.navbar-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+.proj-name { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; }
+.nav-links { list-style: none; display: flex; gap: 20px; }
+.nav-links a { text-decoration: none; color: #333; }
+.intro1 { background-color: #C60F0FA5; padding: 50px 20px; color: white; text-align: center; }
+.grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+.card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+.title { font-weight: bold; margin-bottom: 10px; color: #C60F0FA5; }
+.icon { font-size: 24px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar (White Background) -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="proj-name">1ST YEAR</div>
+            <ul class="nav-links">
+                <li class="nav-link"><a href="{{ url_for('home') }}" aria-current="page">Home</a></li>
+                <li class="nav-link"><a href="{{ url_for('estimator') }}">Estimator</a></li>
+
+            </ul>
+            <div style="width: 80px;"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Red Background) -->
+    <header id="home" class="intro1">
+        <div class="intro">
+            <h1 class="Intro-text">
+                Subjects you'll encounter in your first year at TU Darmstadt
+            </h1>
+        </div>
+    </header>
+
+    <div class="grid-container">
+      <div class="card">
+        <div class="title">Funktonale und objektorientierte Programmierkonzepte (10CP)</div>
+        <div class="icon"><i class="fa-thin fa-laptop-code"></i></div>
+        <div class="content">
+          <p>This course introduces major programming paradigms. Students learn object-oriented programming (OOP) with concepts like classes, inheritance, polymorphism, and encapsulation, as well as functional programming with recursion, higher-order functions, immutability, and lambda calculus.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">DIGITALTECHNIK (5CP)</div>
+        <div class="icon"><i class="fa-thin fa-shield-check"></i></div>
+        <div class="content">
+          <p>This subject covers the basics of digital circuits and systems. Topics usually include number systems, Boolean algebra, logic gates, combinational and sequential circuits, finite state machines, and the design of simple processors. It builds the foundation for understanding hardware and low-level computing.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">Rechnerorganisation (5CP)</div>
+        <div class="icon"><i class="fa-thin fa-wrench-simple"></i></div>
+        <div class="content">
+          <p>This subject introduces the internal structure of computers. Students learn about digital logic, instruction sets, CPU architecture, memory hierarchy, and input/output systems. It explains how hardware executes machine instructions and how high-level programs map down to the hardware level.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Algorithmen und Datastrukturen (10CP)</div>
+        <div class="icon"><i class="fa-thin fa-laptop-code"></i></div>
+        <div class="content">
+          <p>This course covers fundamental techniques for solving computational problems efficiently. Students learn about classical algorithms (sorting, searching, graph algorithms) and data structures (arrays, linked lists, stacks, queues, trees, hash tables, graphs). The focus is on understanding complexity (Big-O notation) and choosing the right data structure for a problem. It’s a cornerstone of computer science.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">Aussagen- und Prädikatenlogik (9CP)</div>
+        <div class="icon"><i class="fa-thin fa-shield-check"></i></div>
+        <div class="content">
+          <p>This course introduces formal logic, which is fundamental in theoretical computer science and software verification. Students study propositional logic (truth tables, logical connectives, satisfiability) and predicate logic (quantifiers, inference rules, proofs). The goal is to develop rigorous reasoning skills for mathematics, algorithms, and programming language semantics.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">Automaten, formale Sprachen und Entscheidbarkeit (5CP)</div>
+        <div class="icon"><i class="fa-thin fa-wrench-simple"></i></div>
+        <div class="content">
+          <p>This is a theoretical computer science course. It focuses on automata theory (finite automata, pushdown automata, Turing machines), formal languages (regular languages, context-free languages, grammars), and computability (decidability, the limits of what can be computed). It provides the mathematical foundations for compilers, programming languages, and understanding the theoretical limits of computation.</p>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>
